@@ -3,7 +3,8 @@
 </script>
 
 <template>
-     <el-button type="primary" disabled>Primary</el-button>
+     <!-- 一级路由出口组件 -->
+     <router-view></router-view>
 </template>
 
 <style scoped>
