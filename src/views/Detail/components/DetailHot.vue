@@ -1,31 +1,47 @@
 <script setup>
 import { fetchHotGoodsAPI } from '@/apis/detail'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from "vue-router"
 const route = useRoute();
 const hotList = ref([]);
 const getHotList = async () => {
     const res = await fetchHotGoodsAPI({
         id: route.params.id,
-        type: 1
+        type: props.hotType
     })
     hotList.value = res.result
 }
 onMounted(() => {
     getHotList()
 });
+
+// 设计props参数, 适配不同的title和数据
+const props = defineProps({
+    hotType: {
+        type: Number
+    },
+})
+
+const TYPEMAP = {
+    1: '24小时热榜',
+    2: '周热榜'
+}
+
+// 搞不懂这里如果把=>后面换成对象返回就不行了?
+const title = computed(() => TYPEMAP[props.hotType])
+
 </script>
 
 
 <template>
     <div class="goods-hot">
-        <h3>周日榜单</h3>
+        <h3>{{ title }}</h3>
         <!-- 商品区块 -->
         <RouterLink to="/" class="goods-item" v-for="item in hotList" :key="item.id">
             <img :src="item.picture" alt="" />
             <p class="name ellipsis">{{ item.name }}</p>
             <p class="desc ellipsis">{{ item.desc }}</p>
-            <p class="price">&yen;200.00</p>
+            <p class="price">&yen;{{ item.price }}</p>
         </RouterLink>
     </div>
 </template>
