@@ -5,7 +5,7 @@
 <template>
   <!-- 一级路由出口组件 -->
   <router-view></router-view>
-  <el-backtop :bottom="100">
+  <!-- <el-backtop :bottom="100">
     <div style="
         height: 100%;
         width: 100%;
@@ -18,7 +18,7 @@
       ">
       ⬆
     </div>
-  </el-backtop>
+  </el-backtop> -->
 </template>
 
 <style scoped lang="scss">
