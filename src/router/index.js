@@ -16,7 +16,8 @@ const router = createRouter({
         component: Home
       },
       {
-        path: 'category',
+        // 传入id参数
+        path: 'category/:id',
         component: Category
       },
     ],
