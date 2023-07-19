@@ -19,18 +19,40 @@ onMounted(() => {
 const goodList = ref([]);
 const reqData = ref({
   categoryId: route.params.id,
-  page: 1,
+  page: 2,
   pageSize: 20,
   sortField: 'publishTime'
 })
 const getGoodList = async () => {
   const res = await getSubCategoryAPI(reqData.value);
+  // console.log(res);
   goodList.value = res.result.items
 }
 onMounted(() => {
   getGoodList();
 })
 
+// tab切换回调
+const tabChange = () => {
+  // 切换页面重置为1
+  reqData.value.page += 1;
+  if (reqData.value.page == 20) reqData.value.page = 1;
+  getGoodList()
+}
+
+// 加载更多
+const disabled = ref(false);
+const load = async() => {
+  // 获取下一页的数据
+  reqData.value.page += 1;
+  const res = await getSubCategoryAPI(reqData.value);
+  goodList.value = [...goodList.value, ...res.result.items];
+  // 加载完毕 停止监听
+  if(res.result.items.length === 0){
+    disabled.value = true;
+  }
+  
+}
 </script>
 
 <template>
@@ -45,14 +67,15 @@ onMounted(() => {
       </el-breadcrumb>
     </div>
     <div class="sub-container">
-      <el-tabs>
+      <el-tabs v-model="reqData.sortField" @tab-change="tabChange">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <!-- 以下两个指令都是由element plus提供, 前一个是判断是否到底, 后一个判断是否取消监听 -->
+      <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
         <!-- 商品列表-->
-        <GoodsItem v-for="goods in goodList" :goods="goods" :key="goods.id"/>
+        <GoodsItem v-for="goods in goodList" :goods="goods" :key="goods.id" />
       </div>
     </div>
   </div>
@@ -75,6 +98,7 @@ onMounted(() => {
     flex-wrap: wrap;
     padding: 0 10px;
   }
+  
 
   .goods-item {
     display: block;
