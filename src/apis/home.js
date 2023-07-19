@@ -19,3 +19,9 @@ export function getHotAPI() {
         // limit: ''
     })
 }
+
+export function getProductAPI() {
+    return httpInstance({
+        url: '/home/goods'
+    })
+}
