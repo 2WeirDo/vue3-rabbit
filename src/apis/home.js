@@ -15,7 +15,7 @@ export function getNewAPI() {
 
 export function getHotAPI() {
     return httpInstance({
-        url: '/home/brand',
+        url: '/home/hot',
         // limit: ''
     })
 }
