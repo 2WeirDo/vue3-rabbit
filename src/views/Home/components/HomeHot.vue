@@ -2,6 +2,9 @@
 import HomePanel from './HomePanel.vue'
 import { getHotAPI } from '@/apis/home'
 import { ref, onMounted } from 'vue'
+
+
+
 const hotList = ref([])
 const getHotList = async () => {
     const res = await getHotAPI()
@@ -18,7 +21,8 @@ onMounted(() => {
         <ul class="goods-list">
             <li v-for="item in hotList" :key="item.id">
                 <RouterLink to="/">
-                    <img :src="item.picture" alt="">
+                    <!-- 这里自定义指令做了图片懒加载 -->
+                    <img v-img-lazy="item.picture" alt="">
                     <p class="name">{{ item.title }}</p>
                     <p class="desc">{{ item.alt }}</p>
                 </RouterLink>
