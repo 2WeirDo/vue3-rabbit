@@ -20,7 +20,7 @@ onMounted(() => {
         <RouterLink class="cover" to="/">
           <img v-img-lazy="cate.picture" />
           <strong class="label">
-            <span>{{ cate.name }}馆</span>
+            <span>{{ cate.name }}</span>
             <span>{{ cate.saleInfo }}</span>
           </strong>
         </RouterLink>
@@ -68,7 +68,9 @@ onMounted(() => {
 
       img {
         width: 100%;
-        height: 100%;
+        border-radius: 40%;
+        box-shadow: 3px 3px 10px black;
+        // height: 100%;
       }
 
       .label {
