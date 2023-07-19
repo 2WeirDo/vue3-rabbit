@@ -3,14 +3,16 @@ import { ref, onMounted } from 'vue'
 import { getCategoryAPI } from '@/apis/category';
 import { useRoute } from 'vue-router'
 import { getBannerAPI } from '@/apis/home';
+import GoodsItem from '../Home/components/GoodsItem.vue';
 const categoryData = ref({});
 const bannerList = ref([]);
 
 // 通过route拿到路由参数
 const route = useRoute();
 
-// 获取面包屑数据
+// 获取面包屑以及分类数据
 const getCategory = async () => {
+    // 注意这里, 其实就是通过route.params.id的不同而从接口中得到不同的数据
     const res = await getCategoryAPI(route.params.id);
     categoryData.value = res.result
 }
@@ -18,7 +20,7 @@ const getCategory = async () => {
 //获取轮播图数据
 const getBanner = async () => {
     const res = await getBannerAPI({
-        distributionSite : '2'
+        distributionSite: '2'
     });
     bannerList.value = res.result
 }
@@ -47,6 +49,26 @@ onMounted(() => {
                         <img :src="item.imgUrl" alt="">
                     </el-carousel-item>
                 </el-carousel>
+            </div>
+            <!-- 分类页面数据 -->
+            <div class="sub-list">
+                <h3>全部分类</h3>
+                <ul>
+                    <li v-for="i in categoryData.children" :key="i.id">
+                        <RouterLink to="/">
+                            <img :src="i.picture" />
+                            <p>{{ i.name }}</p>
+                        </RouterLink>
+                    </li>
+                </ul>
+            </div>
+            <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+                <div class="head">
+                    <h3>- {{ item.name }}-</h3>
+                </div>
+                <div class="body">
+                    <GoodsItem v-for="good in item.goods" :goods="good" :key="good.id" />
+                </div>
             </div>
         </div>
     </div>
