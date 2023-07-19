@@ -16,6 +16,11 @@ onMounted(() => {
   <LayoutSticky />
   <LayoutNav />
   <LayoutHeader />
+  
+  <!-- 方案一 -->
+  <!-- 添加一个独一无二的key, 破坏复用机制, 强制销毁重建, 解决路由缓存问题 -->
+  <!-- <RouterView :key="$route.fullPath" /> -->
   <RouterView />
+
   <LayoutFooter />
 </template> 
