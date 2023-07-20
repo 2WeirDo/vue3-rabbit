@@ -1,6 +1,6 @@
 <script setup>
 import { useMouseInElement } from '@vueuse/core';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 // 图片列表
 const imageList = [
@@ -20,6 +20,7 @@ const enterhandler = (i) => {
 // 2. 控制滑块跟随移动 (监听elementX/Y的变化, 一旦变化 重新设置left/top)
 // 获取鼠标相对位置
 const target = ref(null)
+// 注意使用elementX/Y时后面也要加上value
 const { elementX, elementY, isOutside } = useMouseInElement(target);
 // 1. 有效移动范围内的计算逻辑
 // 横向:100 < elementX < 300，left = elementX - 小滑块宽度一半
@@ -29,19 +30,33 @@ const { elementX, elementY, isOutside } = useMouseInElement(target);
 // 纵向：elementY > 300 top = 200 elementY < 100 top = 0
 const left = ref(0);
 const top = ref(0)
-watch([elementX, elementY], () => {
-  if(elementX.value > 100 && elementX < 300){
-    left.value = elementX - 100
+const positionX = ref(0);
+const positionY = ref(0);
+watch([elementX, elementY, isOutside], () => {
+  
+  // 如果鼠标没有移入到盒子里面 直接不执行后面的逻辑
+  if (isOutside.value) return
+
+  if (elementX.value > 100 && elementX.value < 300) {
+    left.value = elementX.value - 100
   }
-  if(elementY.value > 100 && elementY < 300){
-    top.value = elementY - 100;
+  if (elementY.value > 100 && elementY.value < 300) {
+    top.value = elementY.value - 100;
   }
   // 处理边界
-  if(elementX > 300) left.value = 200
-  if(elementX < 100) left.value = 0
-  if(elementY > 300) top.value = 200;
-  if(elementY < 100) top.value = 0
+  if (elementX.value > 300) left.value = 200
+  if (elementX.value < 100) left.value = 0
+  if (elementY.value > 300) top.value = 200;
+  if (elementY.value < 100) top.value = 0
+
+  // 3. 大图效果实现
+  // 效果：为实现放大效果，大图的宽高是小图的俩倍
+  // 思路：大图的移动方向和滑块移动方向相反，且数值为2倍
+  positionX.value = -left.value * 2
+  positionY.value = -top.value * 2
+
 })
+
 
 </script>
 
@@ -52,7 +67,7 @@ watch([elementX, elementY], () => {
     <div class="middle" ref="target">
       <img :src="imageList[activeIndex]" alt="" />
       <!-- 蒙层小滑块 -->
-      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }"></div>
+      <div class="layer" v-show="isOutside === false" :style="{ left: `${left}px`, top: `${top}px` }"></div>
     </div>
     <!-- 小图列表 -->
     <ul class="small">
@@ -61,13 +76,14 @@ watch([elementX, elementY], () => {
       </li>
     </ul>
     <!-- 放大镜大图 -->
-    <div class="large" :style="[
+    <div class="large" v-show="isOutside === false" :style="[
       {
-        backgroundImage: `url(${imageList[0]})`,
-        backgroundPositionX: `0px`,
-        backgroundPositionY: `0px`,
+        backgroundImage: `url(${imageList[activeIndex]})`,
+        backgroundPositionX: `${positionX}px`,
+        backgroundPositionY: `${positionY}px`
       },
-    ]" v-show="false"></div>
+    ]">
+    </div>
   </div>
 </template>
 
