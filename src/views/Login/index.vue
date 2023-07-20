@@ -18,7 +18,7 @@ const rules = {
         { min: 6, max: 14, message: '密码长度为6-14个字符', trigger: 'blur' }
     ],
     agree: [
-        // 这里自定义校验规则 , value当前输入的数据, callback校验处理函数,通过调用
+        // 这里自定义校验规则 , value当前输入的数据, callback校验处理函数,通过调用, 不管成功还是失败都要执行
         {
             validator: (rule, value, callback) => {
                 // 自定义校验逻辑
@@ -33,6 +33,21 @@ const rules = {
         }
     ]
 }
+
+// 获取form实例, 做统一校验 (当点击登录按钮时)
+const formRef = ref(null);
+const doLogin = () => {
+    // validate方法是element-plus提供的统一调用校验的函数
+    formRef.value.validate((valid) => {
+        // valid: 所有表单都通过校验才为true
+        // 以valid参数作为判断条件, 如果通过校验才执行登录逻辑
+        if(valid){ 
+            // TODO LOGIN
+
+        }
+    })
+}
+
 
 </script>
 
@@ -63,7 +78,7 @@ const rules = {
                             2. 然后给el-form-item加上prop, 绑定使用的规则手段
                             3. 然后给el-input加上双向绑定, 双向绑定表单数据
                          -->
-                        <el-form :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+                        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
                             <el-form-item prop="account" label="账户">
                                 <el-input v-model="form.account" />
                             </el-form-item>
@@ -75,7 +90,7 @@ const rules = {
                                     我已同意隐私条款和服务条款
                                 </el-checkbox>
                             </el-form-item>
-                            <el-button size="large" class="subBtn">点击登录</el-button>
+                            <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
                         </el-form>
                     </div>
                 </div>
