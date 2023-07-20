@@ -40,7 +40,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <ImageView />
+              <ImageView :image-list="goods.mainPictures" />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
@@ -124,7 +124,7 @@ onMounted(() => {
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
                 <!-- 24小时 -->
-                <DetailHot :hot-type="1"></DetailHot>
+                <DetailHot :hot-type="1" ></DetailHot>
                 <!-- 周 -->
                 <DetailHot :hot-type="2"></DetailHot>
             </div>
