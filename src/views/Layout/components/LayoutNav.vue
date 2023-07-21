@@ -10,7 +10,7 @@ const userStore = useUserStore();
       <ul>
         <!-- 多模板渲染 -->
 
-        <!-- 登录时显示第一块, 非登录时显示第二块  判断条件 : 是否由token -->
+        <!-- 登录时显示第一块, 非登录时显示第二块  判断条件 : 是否有token -->
         <template v-if="userStore.userInfo.token">
           <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ userStore.userInfo.account }}</a></li>
           <li>
