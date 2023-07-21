@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import { loginAPI } from '@/apis/user'
 
 // 以下是官方需要引入的样式文件, 如果使用了elementPlus按需引入插件则需要手动导入样式
 // import 'element-plus/es/components/message/style/css'
@@ -9,11 +8,14 @@ import { ElMessage } from 'element-plus' // 这是提示用的组件
 // import router from '@/router';
 import { useRouter } from 'vue-router';
 
+import { useUserStore } from '@/stores/user'
+const useStore = useUserStore();
+
 // 表单校验 (账户名 + 密码), 这就根据官方文档来就行
 // 1. 准备表单对象
 const form = ref({
-    account: '',
-    password: '',
+    account: 'xiaotuxian001',
+    password: '123456',
     agree: true
 })
 // 2. 准备规则对象
@@ -48,16 +50,16 @@ const router = useRouter()
 const doLogin = () => {
     const { account, password } = form.value
     // validate方法是element-plus提供的统一调用校验的函数
-    formRef.value.validate(async(valid) => {
+    formRef.value.validate(async (valid) => {
         // valid: 所有表单都通过校验才为true
         // 以valid参数作为判断条件, 如果通过校验才执行登录逻辑
         if (valid) {
             // TODO LOGIN
-            const res = await loginAPI({account, password})
+            await useStore.getUserInfo({ account, password })
             // 1. 提示用户
-            ElMessage({type: 'success', message: '登录成功'})
+            ElMessage({ type: 'success', message: '登录成功' })
             // 2. 跳转首页
-            router.replace({path: '/'});
+            router.replace({ path: '/' });
         } // 如果登录失败就在axios响应拦截器里面操作, 只需配置一次, 那么多个接口都可生效
         //(因为可能很多个接口都会出现类似的需求)
     })
