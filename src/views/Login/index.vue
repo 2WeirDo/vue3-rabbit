@@ -1,5 +1,13 @@
 <script setup>
 import { ref } from 'vue'
+import { loginAPI } from '@/apis/user'
+
+// 以下是官方需要引入的样式文件, 如果使用了elementPlus按需引入插件则需要手动导入样式
+// import 'element-plus/es/components/message/style/css'
+import 'element-plus/theme-chalk/el-message.css'
+import { ElMessage } from 'element-plus' // 这是提示用的组件
+// import router from '@/router';
+import { useRouter } from 'vue-router';
 
 // 表单校验 (账户名 + 密码), 这就根据官方文档来就行
 // 1. 准备表单对象
@@ -36,15 +44,22 @@ const rules = {
 
 // 获取form实例, 做统一校验 (当点击登录按钮时)
 const formRef = ref(null);
+const router = useRouter()
 const doLogin = () => {
+    const { account, password } = form.value
     // validate方法是element-plus提供的统一调用校验的函数
-    formRef.value.validate((valid) => {
+    formRef.value.validate(async(valid) => {
         // valid: 所有表单都通过校验才为true
         // 以valid参数作为判断条件, 如果通过校验才执行登录逻辑
-        if(valid){ 
+        if (valid) {
             // TODO LOGIN
-
-        }
+            const res = await loginAPI({account, password})
+            // 1. 提示用户
+            ElMessage({type: 'success', message: '登录成功'})
+            // 2. 跳转首页
+            router.replace({path: '/'});
+        } // 如果登录失败就在axios响应拦截器里面操作, 只需配置一次, 那么多个接口都可生效
+        //(因为可能很多个接口都会出现类似的需求)
     })
 }
 
@@ -78,7 +93,8 @@ const doLogin = () => {
                             2. 然后给el-form-item加上prop, 绑定使用的规则手段
                             3. 然后给el-input加上双向绑定, 双向绑定表单数据
                          -->
-                        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+                        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
+                            status-icon>
                             <el-form-item prop="account" label="账户">
                                 <el-input v-model="form.account" />
                             </el-form-item>
