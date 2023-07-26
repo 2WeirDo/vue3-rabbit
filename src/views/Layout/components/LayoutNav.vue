@@ -1,13 +1,15 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router';
+import { ElMessage } from "element-plus";
+
 const router = useRouter();
 const userStore = useUserStore();
 const confirm = () => {
     // 退出登录业务逻辑实现
     // 1. 清除用户信息
     userStore.clearUserInfo();
-
+    ElMessage({ type: "success", message: '退出登录成功' });
     // 2. 跳转登录页面
     router.push('/login')
 }
