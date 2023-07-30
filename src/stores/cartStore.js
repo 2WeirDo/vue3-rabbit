@@ -38,38 +38,60 @@ export const useCartStore = defineStore(
     const singleCheck = (skuId, selected) => {
       // 通过skuId找到要修改的那一项, 然后把它的selected修改为传过来的selected
       // 传过来的selected属于最新的选中状态
-      const item = cartList.value.find((item) => item.skuId === skuId)
-      item.selected = selected
-    }
+      const item = cartList.value.find((item) => item.skuId === skuId);
+      item.selected = selected;
+    };
 
     // 全选功能
     const allCheck = (selected) => {
       // 把cartList中的每一项的selected都设置为全选框状态
-        cartList.value.forEach((item) => item.selected = selected)
-    }
-
-
+      cartList.value.forEach((item) => (item.selected = selected));
+    };
 
     // 计算属性  注意computed的使用要么后面不加{}就直接返回值, 要么{}加return
+
     // 1. 总的数量 - count之和
-    const allCount = computed(() => cartList.value.reduce((pre, cur) => pre + cur.count, 0));
+    const allCount = computed(() =>
+      cartList.value.reduce((pre, cur) => pre + cur.count, 0)
+    );
     // const allCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
+
     // 2. 总价 -  count * price 之和
     const allPrice = computed(() => {
-      return cartList.value.reduce((pre, cur) => pre + cur.count * cur.price, 0)
+      return cartList.value.reduce(
+        (pre, cur) => pre + cur.count * cur.price,
+        0
+      );
     });
     // const allPrice = computed(() => cartList.value.reduce((a, c) => a + c.count * c.price, 0))
-    
+
+    // 3. 已选择数量
+    const selectedCount = computed(() =>
+      cartList.value
+        .filter((item) => item.selected === true)
+        .reduce((pre, cur) => pre + cur.count, 0)
+    );
+
+    // 4. 已选择商品价钱合计
+    const selectedPrice = computed(() =>
+      cartList.value
+        .filter((item) => item.selected === true)
+        .reduce((pre, cur) => pre + cur.price * cur.count, 0)
+    );
 
     // 是否全选
     // 当所有项是选中状态时, 全选按钮才为选中
-    const isAll = computed(() => cartList.value.every((item) => item.selected === true))
+    const isAll = computed(() =>
+      cartList.value.every((item) => item.selected === true)
+    );
 
     return {
       cartList,
       allCount,
       allPrice,
       isAll,
+      selectedCount,
+      selectedPrice,
       addCart,
       delCart,
       singleCheck,
