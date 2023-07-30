@@ -2,8 +2,8 @@
 
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { useUserStore } from "./user";
-import { insertCartAPI, findNewCartListAPI } from "@/apis/cart";
+import { useUserStore } from "./userStore";
+import { insertCartAPI, findNewCartListAPI, delCartAPI } from "@/apis/cart";
 
 export const useCartStore = defineStore(
   "cart",
@@ -12,19 +12,25 @@ export const useCartStore = defineStore(
     const isLogin = computed(() => userStore.userInfo.token);
     // 1. 定义state
     const cartList = ref([]);
+
+    // 获取最新购物车列表
+    const updateNewList = async () => {
+      // 获取最新购物车列表
+      const res = await findNewCartListAPI();
+      // 接口购物车列表覆盖本地购物车列表
+      cartList.value = res.result;
+    };
+
     // 2. 定义action
-    const addCart = async(goods) => {
-      const {skuId, count} = goods
+    const addCart = async (goods) => {
+      const { skuId, count } = goods;
       if (isLogin) {
         // 登录之后的加入购物车逻辑
         // 调用加入购物车接口
-        await insertCartAPI({skuId, count})
-        // 获取最新购物车列表
-        const res = await findNewCartListAPI()
-        // 接口购物车列表覆盖本地购物车列表
-        cartList.value = res.result
-      } 
-      else {
+        await insertCartAPI({ skuId, count });
+        // 调用获取最新购物车列表的函数
+        updateNewList();
+      } else {
         // 添加购物车操作
         // 已添加过 - count + 1
         // 没有添加该 - push
@@ -42,12 +48,18 @@ export const useCartStore = defineStore(
     };
 
     // 删除购物车
-    const delCart = (skuId) => {
-      // 思路1. 找到要删除项的下标值 - splice
-      const idx = cartList.value.findIndex((item) => skuId === item.skuId);
-      cartList.value.splice(idx, 1);
-      // 思路2. 使用数组的过滤方法 - filter
-      // cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
+    const delCart = async (skuId) => {
+      if (isLogin) {
+        // 调用接口实现接口购物车中的删除功能
+        await delCartAPI([skuId]);
+        updateNewList();
+      } else {
+        // 思路1. 找到要删除项的下标值 - splice
+        const idx = cartList.value.findIndex((item) => skuId === item.skuId);
+        cartList.value.splice(idx, 1);
+        // 思路2. 使用数组的过滤方法 - filter
+        // cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
+      }
     };
 
     // 单选功能

@@ -8,7 +8,7 @@ import { ElMessage } from 'element-plus' // 这是提示用的组件
 // import router from '@/router';
 import { useRouter } from 'vue-router';
 
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/userStore'
 const useStore = useUserStore();
 
 // 表单校验 (账户名 + 密码), 这就根据官方文档来就行

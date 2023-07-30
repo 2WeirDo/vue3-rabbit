@@ -1,5 +1,5 @@
 <script setup>
-import { useCategoryStore } from '@/stores/category';
+import { useCategoryStore } from '@/stores/categoryStore';
 const categoryStore = useCategoryStore();
 
 </script>
@@ -68,7 +68,7 @@ const categoryStore = useCategoryStore();
                 position: absolute;
                 left: 250px;
                 top: 0;
-                display: none; 
+                display: none;
                 // 注意不hover是是隐藏的
                 padding: 0 15px;
 
