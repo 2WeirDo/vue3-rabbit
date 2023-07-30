@@ -3,7 +3,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useUserStore } from "./userStore";
-import { insertCartAPI, findNewCartListAPI, delCartAPI } from "@/apis/cart";
+import { insertCartAPI, findNewCartListAPI, delCartAPI} from "@/apis/cart";
 
 export const useCartStore = defineStore(
   "cart",
@@ -13,7 +13,7 @@ export const useCartStore = defineStore(
     // 1. 定义state
     const cartList = ref([]);
 
-    // 获取最新购物车列表
+    // 封装获取最新购物车列表函数
     const updateNewList = async () => {
       // 获取最新购物车列表
       const res = await findNewCartListAPI();
@@ -130,6 +130,7 @@ export const useCartStore = defineStore(
       singleCheck,
       allCheck,
       clearCart,
+      updateNewList,
     };
   },
   {

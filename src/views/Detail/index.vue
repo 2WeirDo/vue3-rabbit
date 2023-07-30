@@ -50,7 +50,7 @@ const addCart = () => {
       attrsText: skuObj.specsText,
       selected: true
     });
-    ElMessage.success('添加购物车成功')
+    // ElMessage.success('添加购物车成功')
   }
   else {
     // 规格没有选择完毕 : 提示用户
