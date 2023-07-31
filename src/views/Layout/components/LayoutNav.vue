@@ -23,7 +23,7 @@ const confirm = () => {
 
         <!-- 登录时显示第一块, 非登录时显示第二块  判断条件 : 是否有token -->
         <template v-if="userStore.userInfo.token">
-          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ userStore.userInfo.account }}</a></li>
+          <li><a href="javascript:;"  @click="$router.push('/member')"><i class="iconfont icon-user"></i>{{ userStore.userInfo.account }}</a></li>
           <li>
             <!-- 文档中写到当触发点击确认按钮时触发confirm事件 -->
             <el-popconfirm @confirm="confirm" title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
@@ -32,13 +32,14 @@ const confirm = () => {
               </template>
             </el-popconfirm>
           </li>
-          <li><a href="javascript:;">我的订单</a></li>
-          <li><a href="javascript:;">会员中心</a></li>
+          <li><a href="javascript:;" @click="$router.push('/member/order')">我的订单</a></li>
+          <li><a href="javascript:;" @click="$router.push('/member')">会员中心</a></li>
+          <li><a href="javascript:;" @click="$router.push('/cartlist')">购物车</a></li>
         </template>
         <template v-else>
           <li><a href="javascript:;" @click="$router.push('/login')">请先登录</a></li>
-          <li><a href="javascript:;">帮助中心</a></li>
-          <li><a href="javascript:;">关于我们</a></li>
+          <li><a href="https://2weirdo.github.io/">帮助中心</a></li>
+          <li><a href="https://2weirdo.github.io/">关于我们</a></li>
         </template>
       </ul>
     </div>
