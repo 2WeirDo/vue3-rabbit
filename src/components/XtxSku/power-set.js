@@ -1,4 +1,4 @@
-
+// 生成原始集合的所有可能子集，最终得到幂集 subSets。
 export default function bwPowerSet (originalSet) {
   const subSets = []
 
