@@ -5,20 +5,8 @@
 <template>
   <!-- 一级路由出口组件 -->
   <router-view></router-view>
-  <!-- <el-backtop :bottom="100">
-    <div style="
-        height: 100%;
-        width: 100%;
-        background-color: var(--el-bg-color-overlay);
-        box-shadow: var(--el-box-shadow-lighter);
-        text-align: center;
-        line-height: 40px;
-        color: #1989fa;
-        border-radius: 40%;
-      ">
-      ⬆
-    </div>
-  </el-backtop> -->
+  <!-- 回到顶部 -->
+    <el-backtop :right="36" :bottom="66" />
 </template>
 
 <style scoped lang="scss">

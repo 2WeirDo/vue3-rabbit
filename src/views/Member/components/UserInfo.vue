@@ -23,7 +23,9 @@ onMounted(() => getLikeList())
     <!-- 用户信息 -->
     <div class="user-meta">
       <div class="avatar">
-        <img :src="userStore.userInfo?.avatar" />
+        <!-- <img :src="userStore.userInfo?.avatar"/> -->
+        <img src="https://2weirdo.github.io/img/messi.jpg"  style="width: 100%; height: auto; transform: scale(1.6);"/>
+
       </div>
       <h4>{{ userStore.userInfo?.account }}</h4>
     </div>

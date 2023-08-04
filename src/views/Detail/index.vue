@@ -159,7 +159,7 @@ const addCart = () => {
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in goods.details.pictures" :src="img" alt="" :key="img">
+                    <img v-for="img in goods.details.pictures" :src="img" alt="" :key="img" >
                 </div>
               </div>
             </div>
