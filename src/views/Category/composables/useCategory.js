@@ -17,7 +17,8 @@ export function useCategory() {
     const res = await getCategoryAPI(id);
     categoryData.value = res.result;
   };
-
+  
+  // 路由缓存问题：当路由path一样，参数不同的时候会选择直接复用路由对应的组件
   // 方案二
   // 目标 : 路由参数变化的时候, 可以把分类数据接口重新发送, 解决路由缓存问题
   onBeforeRouteUpdate((to) => {
